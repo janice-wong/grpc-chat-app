@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text.RegularExpressions;
 using Chatter;
 
 namespace GreeterClient
@@ -33,5 +34,11 @@ namespace GreeterClient
         Console.WriteLine(messageResponse.SenderId + ": " + messageResponse.Content);
       }
     }
-  }
+
+		public bool ValidateUserInput(string userInput)
+		{
+			var rxValidUserInput = new Regex(@"(All|[\d]+): (?s).*");
+			return rxValidUserInput.IsMatch(userInput);
+		}
+	}
 }

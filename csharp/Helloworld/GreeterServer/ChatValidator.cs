@@ -17,5 +17,7 @@ namespace GreeterServer
 		{
 			return recipientId == "All" || userIds.IndexOf(recipientId) > -1 && senderId != recipientId;
 		}
+
+		// TODO: Validate if user sends message to All but there are no other users
 	}
 }

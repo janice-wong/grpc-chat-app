@@ -28,8 +28,7 @@ namespace GreeterClient
 
     public void PrintReceivedMessage(GetMessageResponse messageResponse)
     {
-      // How do I check if no attributes were sent back?
-      if (messageResponse.Content != "N/A")
+      if (!string.IsNullOrEmpty(messageResponse.Content))
       {
         Console.WriteLine(messageResponse.SenderId + ": " + messageResponse.Content);
       }

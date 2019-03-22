@@ -99,8 +99,7 @@ namespace GreeterServer
         }
       }
 
-      //return Task.FromResult(new GetMessageResponse { });
-      return Task.FromResult(new GetMessageResponse { Content = "N/A" });
+      return Task.FromResult(new GetMessageResponse());
     }
 
     public override Task<GetMessageStatusResponse> GetMessageStatus(GetMessageStatusRequest request, ServerCallContext context)

@@ -2,7 +2,7 @@ using System;
 using System.Threading;
 using Grpc.Core;
 using Chatter;
-using System.Runtime.InteropServices;
+using System.Text.RegularExpressions;
 
 namespace GreeterClient
 {
@@ -43,26 +43,19 @@ namespace GreeterClient
 
       while (chatValid)
       {
-        var response = Console.ReadLine();
+        var userInput = Console.ReadLine();
+        var rxValidUserInput = new Regex(@"(All|[\d]+): (?s).*");
+				if (!rxValidUserInput.IsMatch(userInput))
+				{
+					Console.WriteLine("Invalid message");
+					continue;
+				}
 
-        int colonIndex;
-        string recipient = null;
-        string messageContent = null;
-
-        try
-        {
-          colonIndex = response.IndexOf(": ");
-          recipient = response.Substring(0, colonIndex);
-          messageContent = response.Substring(colonIndex + 2);
-        }
-        catch (Exception)
-        {
-          Console.WriteLine("Invalid message");
-        }
-
+        var colonIndex = userInput.IndexOf(": ");
+        var recipient = userInput.Substring(0, colonIndex);
+        var messageContent = userInput.Substring(colonIndex + 2);
+     
         var messageStatusList = new Google.Protobuf.Collections.RepeatedField<MessageStatus>();
-
-        // How do I get the below not to run if the above try block fails? Currently if the above try block fails, the client crashes.
 
         try
         {

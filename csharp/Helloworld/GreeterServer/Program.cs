@@ -31,24 +31,21 @@ namespace GreeterServer
 
     }
 
-    public override Task<GetMessageStatusResponse> SendMessage(SendMessageRequest request, ServerCallContext context)
-    {
-      var response = new GetMessageStatusResponse { };
+		public override Task<GetMessageStatusResponse> SendMessage(SendMessageRequest request, ServerCallContext context)
+		{
+			var response = new GetMessageStatusResponse { };
 
-      var validRecipient = request.RecipientType == RecipientType.All || ChatValidator.ValidateRecipient(_users, request.SenderId, request.RecipientId);
-      var validMessageContent = ChatValidator.ValidateMessageCharLimit(request.Content);
+			if (!ChatValidator.ValidateRecipient(_users, request.SenderId, request.RecipientId))
+			{
+				throw new RpcException(new Status(StatusCode.InvalidArgument, "You specified an invalid recipient."));
+			}
 
-      if (!validRecipient)
-      {
-        throw new RpcException(new Status(StatusCode.InvalidArgument, "You specified an invalid recipient."));
-      }
+			if (!ChatValidator.ValidateMessageCharLimit(request.Content))
+			{
+				throw new RpcException(new Status(StatusCode.InvalidArgument, "Message must be less than " + ChatValidator.CharLimit + " characters."));
+			}
 
-      if (!validMessageContent)
-      {
-        throw new RpcException(new Status(StatusCode.InvalidArgument, "Message must be between 0 and " + ChatValidator.CharLimit + " characters."));
-      }
-
-      if (request.RecipientType == RecipientType.Single)
+			if (request.RecipientType == RecipientType.Single)
       {
         var message = new Message(request.SenderId, request.RecipientId, request.Content);
         _messages.Add(message);

@@ -44,47 +44,41 @@ namespace GreeterClient
       while (chatValid)
       {
         var userInput = Console.ReadLine();
+
+				// Determine whether or not user input is valid
         var rxValidUserInput = new Regex(@"(All|[\d]+): (?s).*");
 				if (!rxValidUserInput.IsMatch(userInput))
 				{
 					Console.WriteLine("Invalid message");
 					continue;
 				}
-
+				
+				// Parse user input if valid
         var colonIndex = userInput.IndexOf(": ");
-        var recipient = userInput.Substring(0, colonIndex);
-        var messageContent = userInput.Substring(colonIndex + 2);
-     
+        var recipientInput = userInput.Substring(0, colonIndex);
+				var recipientType = recipientInput == "All" ? RecipientType.All : RecipientType.Single;
+				var messageContent = userInput.Substring(colonIndex + 2);
+
         var messageStatusList = new Google.Protobuf.Collections.RepeatedField<MessageStatus>();
 
-        try
-        {
-          if (recipient == "All")
+				// Send the message
+				try
+				{
+          messageStatusList = client.SendMessage(new SendMessageRequest
           {
-            messageStatusList = client.SendMessage(new SendMessageRequest
-            {
-              SenderId = userId,
-              RecipientType = RecipientType.All,
-              Content = messageContent
-            }).MessageStatuses;
-          }
-          else
-          {
-            // Send a message to a single user
-            messageStatusList = client.SendMessage(new SendMessageRequest
-            {
-              SenderId = userId,
-              RecipientType = RecipientType.Single,
-              RecipientId = recipient,
-              Content = messageContent
-            }).MessageStatuses;
-          }
+            SenderId = userId,
+            RecipientType = recipientType,
+						RecipientId = recipientInput,
+            Content = messageContent
+          }).MessageStatuses;
         }
-        catch (RpcException e)
-        {
+				// Return errors if any
+				catch (RpcException e)
+				{
           Console.WriteLine(e.Status.Detail);
         }
 
+				// Print any acks
         foreach (var messageStatus in messageStatusList)
         {
           clientPrompt.PrintAck(messageStatus);

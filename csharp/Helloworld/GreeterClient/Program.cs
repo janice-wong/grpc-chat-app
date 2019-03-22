@@ -46,9 +46,6 @@ namespace GreeterClient
       {
         var userInput = Console.ReadLine();
 
-				// Determine whether or not user input is valid
-				//    var rxValidUserInput = new Regex(@"(All|[\d]+): (?s).*");
-				//if (!rxValidUserInput.IsMatch(userInput))
 				if (!clientPrompt.ValidateUserInput(userInput))
 				{
 					Console.WriteLine("Invalid message");

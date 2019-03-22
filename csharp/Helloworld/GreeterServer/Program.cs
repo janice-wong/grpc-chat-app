@@ -12,7 +12,21 @@ namespace GreeterServer
     private List<string> _users;
     private readonly List<Message> _messages;
 
-    public GreeterImpl()
+		private MessageStatus SendSingleMessage(Message message)
+		{
+			_messages.Add(message);
+
+			var messageStatus = new MessageStatus
+			{
+				Content = message.Content,
+				DeliveredTo = DeliveredTo.Server,
+				RecipientId = message.RecipientId
+			};
+
+			return messageStatus;
+		}
+
+		public GreeterImpl()
     {
       _users = new List<string>();
       _messages = new List<Message>();
@@ -33,7 +47,6 @@ namespace GreeterServer
 
 		public override Task<GetMessageStatusResponse> SendMessage(SendMessageRequest request, ServerCallContext context)
 		{
-			var response = new GetMessageStatusResponse { };
 
 			if (!ChatValidator.ValidateRecipient(_users, request.SenderId, request.RecipientId))
 			{
@@ -45,19 +58,14 @@ namespace GreeterServer
 				throw new RpcException(new Status(StatusCode.InvalidArgument, "Message must be less than " + ChatValidator.CharLimit + " characters."));
 			}
 
+			var response = new GetMessageStatusResponse { };
+
+			// TODO: Pull the below logic into separate classes to more easily write unit tests
+
 			if (request.RecipientType == RecipientType.Single)
       {
-        var message = new Message(request.SenderId, request.RecipientId, request.Content);
-        _messages.Add(message);
-
-        var messageStatus = new MessageStatus
-        {
-          Content = message.Content,
-          DeliveredTo = DeliveredTo.Server,
-          RecipientId = message.RecipientId
-        };
-
-        response.MessageStatuses.Add(messageStatus);
+				var message = new Message(request.SenderId, request.RecipientId, request.Content);
+				response.MessageStatuses.Add(SendSingleMessage(message));
         return Task.FromResult(response);
       }
 
@@ -69,16 +77,8 @@ namespace GreeterServer
         }
 
         var message = new Message(request.SenderId, user, request.Content);
-        _messages.Add(message);
-
-        var messageStatus = new MessageStatus
-        {
-          Content = message.Content,
-          DeliveredTo = DeliveredTo.Server,
-          RecipientId = message.RecipientId
-        };
-        response.MessageStatuses.Add(messageStatus);
-      }
+				response.MessageStatuses.Add(SendSingleMessage(message));
+			}
 
       return Task.FromResult(response);
     }

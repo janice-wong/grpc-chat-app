@@ -12,8 +12,10 @@ namespace GreeterClient
     {
       while (true)
       {
+				// Print received messages
         clientPrompt.PrintReceivedMessage(client.GetFirstUnreadMessage(new GetMessageRequest { RecipientId = userId }));
 
+				// Print acks
         var messageStatusList = client.GetMessageStatus(new GetMessageStatusRequest { SenderId = userId }).MessageStatuses;
         if (messageStatusList.Count > 0)
         {
@@ -35,11 +37,10 @@ namespace GreeterClient
       var clientPrompt = new ClientPrompt();
       var userId = client.GetUserId(new GetUserIdRequest { }).UserId;
       var chatValid = true;
+      var thread = new Thread(() => ListenForMessages(client, clientPrompt, userId));
 
-      Thread thread = new Thread(() => ListenForMessages(client, clientPrompt, userId));
       thread.Start();
-
-      clientPrompt.Start(userId);
+			clientPrompt.Start(userId);
 
       while (chatValid)
       {
@@ -61,7 +62,7 @@ namespace GreeterClient
 
         var messageStatusList = new Google.Protobuf.Collections.RepeatedField<MessageStatus>();
 
-				// Send the message
+				// Send or broadcast a message
 				try
 				{
           messageStatusList = client.SendMessage(new SendMessageRequest
@@ -72,13 +73,13 @@ namespace GreeterClient
             Content = messageContent
           }).MessageStatuses;
         }
-				// Return errors if any
+				// Print errors if any
 				catch (RpcException e)
 				{
           Console.WriteLine(e.Status.Detail);
         }
 
-				// Print any acks
+				// Print acks
         foreach (var messageStatus in messageStatusList)
         {
           clientPrompt.PrintAck(messageStatus);

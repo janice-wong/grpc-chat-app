@@ -15,9 +15,7 @@ namespace GreeterServer
 		// Recipient cannot be the sender and must be in the list of existing users
 		public static bool ValidateRecipient(List<string> userIds, string senderId, string recipientId)
 		{
-			return recipientId == "All" || userIds.IndexOf(recipientId) > -1 && senderId != recipientId;
+			return recipientId == "All" && userIds.Count > 1 || userIds.IndexOf(recipientId) > -1 && senderId != recipientId;
 		}
-
-		// TODO: Validate if user sends message to All but there are no other users
 	}
 }

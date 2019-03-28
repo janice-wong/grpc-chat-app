@@ -1,7 +1,6 @@
-using GreeterClient;
 using Xunit;
 
-namespace Greeter.UnitTests
+namespace GreeterClient.Tests
 {
   public class ClientPromptTest
   {

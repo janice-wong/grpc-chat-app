@@ -3,7 +3,7 @@ namespace GreeterServer
 {
   public class Message
   {
-    public string Id { get; set; }
+    public Guid Id { get; set; }
     public string SenderId { get; set; }
     public string RecipientId { get; set; }
     public string Content { get; set; }
@@ -11,7 +11,7 @@ namespace GreeterServer
 
     public Message(string senderId, string recipientId, string content)
     {
-      Id = Convert.ToString(DateTime.Now);
+      Id = Guid.NewGuid();
       SenderId = senderId;
       RecipientId = recipientId;
       Content = content;

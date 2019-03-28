@@ -9,7 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GreeterClient", "GreeterCli
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GreeterServer", "GreeterServer\GreeterServer.csproj", "{DDBFF994-E076-43AD-B18D-049DFC1B670C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Greeter.UnitTests", "Greeter.UnitTests\Greeter.UnitTests.csproj", "{A2A41580-6223-48FB-8195-FC7131119F54}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GreeterClient.Tests", "GreeterClient.Tests\GreeterClient.Tests.csproj", "{A2A41580-6223-48FB-8195-FC7131119F54}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GreeterServer.Tests", "GreeterServer.Tests\GreeterServer.Tests.csproj", "{00062D3F-2F87-4427-B2B1-DC615190AAF0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,8 +35,15 @@ Global
 		{A2A41580-6223-48FB-8195-FC7131119F54}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A2A41580-6223-48FB-8195-FC7131119F54}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A2A41580-6223-48FB-8195-FC7131119F54}.Release|Any CPU.Build.0 = Release|Any CPU
+		{00062D3F-2F87-4427-B2B1-DC615190AAF0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{00062D3F-2F87-4427-B2B1-DC615190AAF0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{00062D3F-2F87-4427-B2B1-DC615190AAF0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{00062D3F-2F87-4427-B2B1-DC615190AAF0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(MonoDevelopProperties) = preSolution
+		outputpath = ../../build/bin
 	EndGlobalSection
 EndGlobal

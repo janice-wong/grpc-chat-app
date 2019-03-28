@@ -1,0 +1,97 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "io.grpc.examples.helloworld";
+option java_outer_classname = "HelloWorldProto";
+option objc_class_prefix = "HLW";
+
+package chatter;
+
+service Greeter {
+  // Returns a user ID when a client is initialized
+  rpc GetUserId (GetUserIdRequest) returns (GetUserIdResponse) {}
+  
+  // Send a message to one client or all clients and return the status of sent message(s)
+  rpc SendMessage (SendMessageRequest) returns (GetMessageStatusResponse) {}
+  
+  // Return the first unread message given a recipient ID
+  rpc GetFirstUnreadMessage (GetMessageRequest) returns (GetMessageResponse) {}
+  
+  // Return the status of any message given a sender ID
+  rpc GetMessageStatus (GetMessageStatusRequest) returns (GetMessageStatusResponse) {}
+}
+
+message GetUserIdRequest {
+  // optional - added to validate against a user sending this request twice
+  string user_id = 1;
+}
+
+message GetUserIdResponse {
+  string user_id = 1;
+}
+
+enum RecipientType {
+  // messages can be sent to a single client
+  SINGLE = 0;
+  
+  // messages can be sent to all clients
+  ALL = 1;
+}
+
+message SendMessageRequest {
+  // mandatory - the user who is sending this message
+  string sender_id = 1;
+  
+  // mandatory - used to specify whether the sender is sending to a specific client or all clients
+  RecipientType recipient_type = 2;
+  
+  // optional - the user who this message is directed at (only required if sending a message to a specific client)
+  string recipient_id = 3;
+  
+  // mandatory - actual content of the message
+  string content = 4;
+}
+
+/* Notification to sender of message status */
+enum DeliveredTo {
+  // message was delivered (to the server) - aka the message was sent
+  SERVER = 0;
+  
+  // message was delivered (to the receipient) - aka the message was read
+  RECIPIENT = 1;
+}
+
+/* Shows sender status of message */
+message MessageStatus {
+  // message content
+  string content = 1;
+  
+  // if message was delivered to the server (message sent) or delivered to the recipient (message read)
+  DeliveredTo delivered_to = 2;
+  
+  // who the message was for
+  string recipient_id = 3;
+}
+
+message GetMessageStatusResponse {
+  // returns to the sender multiple message_statuses if multiple messages were sent at once (i.e. to all clients)
+  repeated MessageStatus message_statuses = 1;
+}
+
+message GetMessageRequest {
+  // mandatory - user id to retrieve any unread messages directed to the recipient
+  string recipient_id = 1; 
+}
+
+message GetMessageResponse {
+  // the user who sent the recipient this message
+  string sender_id = 1;
+  
+  // message content
+  string content = 2;
+}
+
+message GetMessageStatusRequest {
+  // mandatory - the user who is requesting status for any messages he/she sent
+  string sender_id = 1;
+}

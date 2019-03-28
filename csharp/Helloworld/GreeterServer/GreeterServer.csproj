@@ -7,6 +7,14 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Greeter\Greeter.csproj" />
+    <ProjectReference Include="..\GreeterClient\GreeterClient.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Remove="ChatterImpl.SendMessage.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="ServiceImplementation\" />
+    <Folder Include="RequestHandlers\" />
+  </ItemGroup>
 </Project>

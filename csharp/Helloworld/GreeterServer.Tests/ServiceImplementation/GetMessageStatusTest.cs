@@ -1,10 +1,10 @@
 using System;
 namespace GreeterServer.Tests.ServiceImplementation
 {
-	public class GetMessageStatusTest
-	{
-		public GetMessageStatusTest()
-		{
-		}
-	}
+  public class GetMessageStatusTest
+  {
+    public GetMessageStatusTest()
+    {
+    }
+  }
 }

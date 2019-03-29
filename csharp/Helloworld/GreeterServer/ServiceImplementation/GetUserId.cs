@@ -1,6 +1,7 @@
 using System.Threading.Tasks;
 using Chatter;
 using Grpc.Core;
+using GreeterServer.RequestHandlers;
 
 namespace GreeterServer.ServiceImplementation
 {
@@ -8,7 +9,7 @@ namespace GreeterServer.ServiceImplementation
   {
     public override Task<GetUserIdResponse> GetUserId(GetUserIdRequest request, ServerCallContext context)
     {
-      return new RequestHandlers.UserRequestHandler(_users).GetUserId(request);
+      return new UserRequestHandler(_users).GetUserId(request);
     }
   }
 }

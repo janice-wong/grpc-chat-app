@@ -28,6 +28,9 @@ namespace GreeterServer.Tests.Unit.RequestHandlers
       _subjectUnderTest = new MessageRequestHandler(_users, _messages);
     }
 
+    /// <summary>
+    /// Given a message was delivered to a recepient, return a client ack.
+    /// </summary>
     [Fact]
     public void Given_One_Message_Was_Delivered_To_A_Recipient_Return_One_Client_Ack()
     {
@@ -47,6 +50,9 @@ namespace GreeterServer.Tests.Unit.RequestHandlers
       _messages.Should().BeEquivalentTo(expectedMessages);
     }
 
+    /// <summary>
+    /// Given no messages were delivered to a recepient, return no client acks.
+    /// </summary>
     [Fact]
     public void Given_No_Messages_Were_Delivered_To_A_Recipient_Return_No_Client_Acks()
     {

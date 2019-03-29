@@ -53,25 +53,13 @@ namespace GreeterClient
           continue;
         }
 
-        // Parse user input if valid
-        // TODO: Abstract into separate method that takes in user input and return SendMessageRequest
-        var colonIndex = userInput.IndexOf(": ");
-        var recipientInput = userInput.Substring(0, colonIndex);
-        var recipientType = recipientInput == "All" ? RecipientType.All : RecipientType.Single;
-        var messageContent = userInput.Substring(colonIndex + 2);
-
         var messageStatusList = new RepeatedField<MessageStatus>();
+        var sendMessageRequest = clientPrompt.CreateSendMessageRequest(userId, userInput);
 
         // Send or broadcast a message
         try
         {
-          messageStatusList = client.SendMessage(new SendMessageRequest
-          {
-            SenderId = userId,
-            RecipientType = recipientType,
-            RecipientId = recipientInput,
-            Content = messageContent
-          }).MessageStatuses;
+          messageStatusList = client.SendMessage(sendMessageRequest).MessageStatuses;
         }
         // Print errors if any
         catch (RpcException e)

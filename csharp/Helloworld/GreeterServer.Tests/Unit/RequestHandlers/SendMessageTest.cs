@@ -20,7 +20,9 @@ namespace GreeterServer.Tests.Unit.RequestHandlers
       _subjectUnderTest = new MessageRequestHandler(_users, _messages);
     }
 
-    // Given a single message is sent, confirm state of _messages and response
+    /// <summary>
+    /// Given a single message is sent, confirm state of _messages and response
+    /// </summary>
     [Fact]
     public void Given_A_Single_Message_Is_Sent_Return_One_Server_Ack()
     {
@@ -49,8 +51,9 @@ namespace GreeterServer.Tests.Unit.RequestHandlers
       _messages[0].Content.Should().Be(sendMessageRequest.Content);
       _messages[0].DeliveredToRecipient.Should().Be(false);
     }
-
-    // Given a broadcast is sent, confirm state of _messages and response
+    /// <summary>
+    /// Given a broadcast is sent, confirm state of _messages and response
+    /// </summary>
     [Fact]
     public void Given_A_Broadcast_Is_Sent_Return_Multiple_Server_Acks()
     {

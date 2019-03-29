@@ -16,7 +16,7 @@ namespace GreeterServer.Tests.Unit.RequestHandlers
       _users = new List<string>();
       _subjectUnderTest = new UserRequestHandler(_users);
     }
-    
+
     /// <summary>
     /// Given the user already exists in users, return the same user id.
     /// </summary>

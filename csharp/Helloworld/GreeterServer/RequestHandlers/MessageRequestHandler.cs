@@ -69,6 +69,22 @@ namespace GreeterServer.RequestHandlers
       return Task.FromResult(response);
     }
 
+    public Task<GetMessageResponse> GetFirstUnreadMessage(GetMessageRequest request)
+    {
+      foreach (var msg in _messages)
+      {
+        if (msg.RecipientId == request.RecipientId && !msg.DeliveredToRecipient)
+        {
+          var receivedMessage = msg;
+          msg.DeliveredToRecipient = true;
+
+          return Task.FromResult(new GetMessageResponse { SenderId = msg.SenderId, Content = msg.Content });
+        }
+      }
+
+      return Task.FromResult(new GetMessageResponse());
+    }
+
     private MessageStatus SendSingleMessage(Message message)
     {
       _messages.Add(message);

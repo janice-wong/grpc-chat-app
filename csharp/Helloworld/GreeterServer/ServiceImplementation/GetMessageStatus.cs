@@ -1,6 +1,7 @@
 using System.Threading.Tasks;
 using Grpc.Core;
 using Chatter;
+using GreeterServer.RequestHandlers;
 
 namespace GreeterServer.ServiceImplementation
 {
@@ -8,7 +9,7 @@ namespace GreeterServer.ServiceImplementation
   {
     public override Task<GetMessageStatusResponse> GetMessageStatus(GetMessageStatusRequest request, ServerCallContext context)
     {
-      return new RequestHandlers.MessageRequestHandler(_users, _messages).GetMessageStatus(request);
+      return new MessageRequestHandler(_users, _messages).GetMessageStatus(request);
     }
   }
 }

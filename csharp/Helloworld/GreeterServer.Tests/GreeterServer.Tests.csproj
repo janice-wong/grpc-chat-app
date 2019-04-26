@@ -14,8 +14,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="ServiceImplementation\" />
-    <Folder Include="Integration\" />
     <Folder Include="Unit\" />
     <Folder Include="Unit\RequestHandlers\" />
   </ItemGroup>

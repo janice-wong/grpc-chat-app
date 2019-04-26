@@ -8,6 +8,9 @@ namespace GreeterClient
 {
   class Program
   {
+		/// <summary>
+		///	Print messages received and any client or server acks
+		/// </summary>
     static void ListenForMessages(Greeter.GreeterClient client, ClientPrompt clientPrompt, string userId)
     {
       while (true)
@@ -15,7 +18,7 @@ namespace GreeterClient
         // Print received messages
         clientPrompt.PrintReceivedMessage(client.GetFirstUnreadMessage(new GetMessageRequest { RecipientId = userId }));
 
-        // Print acks
+        // Print client acks
         var messageStatusList = client.GetMessageStatus(new GetMessageStatusRequest { SenderId = userId }).MessageStatuses;
         if (messageStatusList.Count > 0)
         {
@@ -29,7 +32,7 @@ namespace GreeterClient
       }
     }
 
-    public static void Main(string[] args)
+    public static void Main()
     {
       Channel channel = new Channel("127.0.0.1:50051", ChannelCredentials.Insecure);
 
@@ -37,9 +40,10 @@ namespace GreeterClient
       var clientPrompt = new ClientPrompt();
       var userId = client.GetUserId(new GetUserIdRequest { }).UserId;
       var chatValid = true;
-      var thread = new Thread(() => ListenForMessages(client, clientPrompt, userId));
 
+      var thread = new Thread(() => ListenForMessages(client, clientPrompt, userId));
       thread.Start();
+
       clientPrompt.Start(userId);
 
       while (chatValid)
@@ -49,7 +53,7 @@ namespace GreeterClient
 
         if (userInputIsInvalid)
         {
-          Console.WriteLine("Invalid message");
+          Console.WriteLine($"Please format your message correctly and try again.{Environment.NewLine}");
           continue;
         }
 
@@ -64,15 +68,19 @@ namespace GreeterClient
         // Print errors if any
         catch (RpcException e)
         {
-          Console.WriteLine(e.Status.Detail);
+					if (e.StatusCode != StatusCode.InvalidArgument)
+					{
+						Console.WriteLine($"Something went wrong. Please contact your admin.{Environment.NewLine}");
+					}
+          Console.WriteLine($"{e.Status.Detail}{Environment.NewLine}");
         }
 
-        // Print acks
-        foreach (var messageStatus in messageStatusList)
-        {
-          clientPrompt.PrintAck(messageStatus);
-        }
-      }
+				// Print server acks
+				foreach (var messageStatus in messageStatusList)
+				{
+					clientPrompt.PrintAck(messageStatus);
+				}
+			}
 
       channel.ShutdownAsync().Wait();
       Console.WriteLine("Press any key to exit...");

@@ -9,4 +9,7 @@
     <ProjectReference Include="..\Greeter\Greeter.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="FluentAssertions" Version="5.6.0" />
+  </ItemGroup>
 </Project>

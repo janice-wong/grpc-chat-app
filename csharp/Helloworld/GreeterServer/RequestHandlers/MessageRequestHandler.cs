@@ -15,6 +15,9 @@ namespace GreeterServer.RequestHandlers
       _messages = messages;
     }
 
+		/// <summary>
+		/// Return client acks if recipient received messages sent
+		/// </summary>
     public Task<GetMessageStatusResponse> GetMessageStatus(GetMessageStatusRequest request)
     {
       var getMessageStatusResponse = new GetMessageStatusResponse { };
@@ -42,9 +45,12 @@ namespace GreeterServer.RequestHandlers
       return Task.FromResult(getMessageStatusResponse);
     }
 
+		/// <summary>
+		/// Send message(s) by adding Message object(s) to message queue and return server ack(s)
+		/// </summary>
     public Task<GetMessageStatusResponse> SendMessage(SendMessageRequest request)
     {
-      request.ValidateRequest(_users);
+      request.ValidateSendMessageRequest(_users);
 
       var response = new GetMessageStatusResponse { };
 
@@ -69,6 +75,9 @@ namespace GreeterServer.RequestHandlers
       return Task.FromResult(response);
     }
 
+		/// <summary>
+		/// Return first unread message and mark Message object as received
+		/// </summary>
     public Task<GetMessageResponse> GetFirstUnreadMessage(GetMessageRequest request)
     {
       foreach (var msg in _messages)
@@ -76,7 +85,7 @@ namespace GreeterServer.RequestHandlers
         if (msg.RecipientId == request.RecipientId && !msg.DeliveredToRecipient)
         {
           var receivedMessage = msg;
-          msg.DeliveredToRecipient = true;
+					msg.MarkAsReceived();
 
           return Task.FromResult(new GetMessageResponse { SenderId = msg.SenderId, Content = msg.Content });
         }
@@ -85,6 +94,9 @@ namespace GreeterServer.RequestHandlers
       return Task.FromResult(new GetMessageResponse());
     }
 
+		/// <summary>
+		/// Add Message object to message queue and return server ack
+		/// </summary>
     private MessageStatus SendSingleMessage(Message message)
     {
       _messages.Add(message);

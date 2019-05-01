@@ -8,9 +8,9 @@ namespace GreeterClient
 {
   class Program
   {
-		/// <summary>
-		///	Print messages received and any client or server acks
-		/// </summary>
+    /// <summary>
+    ///	Print messages received and any client or server acks
+    /// </summary>
     static void ListenForMessages(Greeter.GreeterClient client, ClientPrompt clientPrompt, string userId)
     {
       while (true)
@@ -68,19 +68,19 @@ namespace GreeterClient
         // Print errors if any
         catch (RpcException e)
         {
-					if (e.StatusCode != StatusCode.InvalidArgument)
-					{
-						Console.WriteLine($"Something went wrong. Please contact your admin.{Environment.NewLine}");
-					}
+          if (e.StatusCode != StatusCode.InvalidArgument)
+          {
+            Console.WriteLine($"Something went wrong. Please contact your admin.{Environment.NewLine}");
+          }
           Console.WriteLine($"{e.Status.Detail}{Environment.NewLine}");
         }
 
-				// Print server acks
-				foreach (var messageStatus in messageStatusList)
-				{
-					clientPrompt.PrintAck(messageStatus);
-				}
-			}
+        // Print server acks
+        foreach (var messageStatus in messageStatusList)
+        {
+          clientPrompt.PrintAck(messageStatus);
+        }
+      }
 
       channel.ShutdownAsync().Wait();
       Console.WriteLine("Press any key to exit...");

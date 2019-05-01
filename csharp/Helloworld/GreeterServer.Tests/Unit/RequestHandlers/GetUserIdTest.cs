@@ -17,11 +17,11 @@ namespace GreeterServer.Tests.Unit.RequestHandlers
       _subjectUnderTest = new UserRequestHandler(_users);
     }
 
-		/// <summary>
-		/// Given the user already exists in users, return the same user id.
-		/// Confirm state of users and response.
-		/// </summary>
-		[Fact]
+    /// <summary>
+    /// Given the user already exists in users, return the same user id.
+    /// Confirm state of users and response.
+    /// </summary>
+    [Fact]
     public void Given_User_Exists_Return_Same_User_Id()
     {
       _subjectUnderTest.GetUserId(new GetUserIdRequest { } );
@@ -36,11 +36,11 @@ namespace GreeterServer.Tests.Unit.RequestHandlers
       _users.Should().Equal(expectedUsers);
     }
 
-		/// <summary>
-		/// Given the user does not exist in users, return a new user id.
-		/// /// Confirm state of users and response.
-		/// </summary>
-		[Fact]
+    /// <summary>
+    /// Given the user does not exist in users, return a new user id.
+    /// /// Confirm state of users and response.
+    /// </summary>
+    [Fact]
     public void Given_User_Does_Not_Exist_Return_New_User_Id()
     {
       _subjectUnderTest.GetUserId(new GetUserIdRequest { } );

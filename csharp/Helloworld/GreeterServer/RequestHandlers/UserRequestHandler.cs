@@ -14,10 +14,10 @@ namespace GreeterServer.RequestHandlers
       _users = users;
     }
 
-		/// <summary>
-		/// If user does not exist, add user Id to list of users and return added user Id.
-		/// Otherwise, return existing user Id.
-		/// </summary>
+    /// <summary>
+    /// If user does not exist, add user Id to list of users and return added user Id.
+    /// Otherwise, return existing user Id.
+    /// </summary>
     public Task<GetUserIdResponse> GetUserId(GetUserIdRequest request)
     {
       // TODO: Remove user ID from list of users once user's connection is gone.
